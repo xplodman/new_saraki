@@ -39,6 +39,8 @@
     <!--[if lt IE 9]>
     <script src="assets/js/html5shiv.js"></script>
     <script src="assets/js/respond.min.js"></script>
+    <!--c3 CSS -->
+    <link href="../assets/plugins/c3-master/c3.min.css" rel="stylesheet">
 <![endif]-->
     <style type="text/css">
         @font-face {

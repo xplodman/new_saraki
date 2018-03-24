@@ -65,6 +65,7 @@ SELECT
   possession.completion_receive_date,
   possession.prosecution_decision,
   possession.case_send_date,
+  possession.id AS possession_id,
   possession.case_send_number,
   main_ledger.name AS main_ledger_name,
   depart.name AS depart_name,
@@ -139,7 +140,7 @@ WHERE
                                     if(trim($person_id) != ''){$possession_query .= " AND person.national_id ='$person_id'";}
                                 }
 
-                                $possession_query .= " GROUP BY `case`.id ORDER BY possession.possession_year, possession.possession_number LIMIT 100";
+                                $possession_query .= " GROUP BY `case`.id ORDER BY possession.possession_year DESC , possession.possession_number DESC  LIMIT 100";
                             }else{
                                 $possession_query="
 SELECT
@@ -150,6 +151,7 @@ SELECT
   possession.completion_receive_date,
   possession.prosecution_decision,
   possession.case_send_date,
+  possession.id AS possession_id,
   possession.case_send_number,
   main_ledger.name AS main_ledger_name,
   depart.name AS depart_name,
@@ -182,8 +184,8 @@ WHERE
 GROUP BY
   `case`.id
 ORDER BY
-  possession.possession_year,
-  possession.possession_number
+  possession.possession_year DESC ,
+  possession.possession_number DESC 
 LIMIT 100";
                             }
                             ?>
@@ -216,7 +218,7 @@ LIMIT 100";
                                             <div class="col-md-2">
                                                 <div class="form-group has-danger">
                                                     <select name="main_ledger" class="select2 form-control custom-select"  style="width: 100%; height:100%;">
-                                                        <option value="" disabled selected>
+                                                        <option value="" selected>
                                                             الجدول
                                                         </option>
                                                         <?php
@@ -243,7 +245,7 @@ LIMIT 100";
                                             <div class="col-md-2">
                                                 <div class="form-group has-danger">
                                                     <select name="depart" class="select2 form-control custom-select"  style="width: 100%; height:100%;">
-                                                        <option value="" disabled selected>القسم</option>
+                                                        <option value="" selected>القسم</option>
                                                         <?php
                                                         $query = "SELECT * FROM depart";
                                                         $results=mysqli_query($con, $query);
@@ -277,7 +279,7 @@ LIMIT 100";
                                                 <div class="form-group has-danger">
                                                     <label class="control-label">موضوع التنازع</label>
                                                     <select name="subject" class="select2 form-control custom-select"  style="width: 100%; height:100%;">
-                                                        <option value="" disabled selected></option>
+                                                        <option value="" selected> موضوع النزاع</option>
                                                         <?php
                                                         $query = "SELECT * FROM subject";
                                                         $results=mysqli_query($con, $query);
@@ -303,7 +305,7 @@ LIMIT 100";
                                                 <div class="form-group has-danger">
                                                     <label class="control-label">أسم العضو المعروض عليه القضية</label>
                                                     <select class="select2 form-control custom-select"  style="width: 100%; height:100%;" name="prosecutor">
-                                                        <option value="" disabled selected></option>
+                                                        <option value="" selected>عضو النيابة</option>
                                                         <?php
                                                         $query = "SELECT * FROM prosecutor";
                                                         $results=mysqli_query($con, $query);
@@ -313,7 +315,7 @@ LIMIT 100";
                                                             <option
                                                                 <?php
                                                                 if (!empty($prosecutor)) {
-                                                                    if((int)$prosecutor == (int)$prosecutor["id"]){
+                                                                    if((int)$_POST['prosecutor'] == (int)$prosecutor['id']){
                                                                         echo 'selected';
                                                                     }
                                                                 }
@@ -342,8 +344,7 @@ LIMIT 100";
                                             </div>
                                         </div>
                                         <div class="form-actions">
-                                            <button name="submit" type="submit" class="btn btn-success"> <i class="fa fa-check"></i> Save</button>
-                                            <button type="button" class="btn btn-inverse">Cancel</button>
+                                            <button name="submit" type="submit" class="btn btn-success"> <i class="fa fa-check"></i> بحث</button>
                                         </div>
                                     </div>
                                 </form>
@@ -430,8 +431,9 @@ LIMIT 100";
                                                     ?>
                                                 </td>
                                                 <td>
-                                                    <button type="button" class="btn btn-info btn-rounded">تفاصيل
-                                                    </button>
+                                                    <a type="button" class="btn btn-info btn-rounded"  href="possession_profile.php?id=<?php echo $possession_info['possession_id'] ?>">
+                                                        للتعديل
+                                                    </a>
                                                 </td>
                                                 <td>
                                                     <?php echo " ".$possession_info['case_receive_date']?>
@@ -580,59 +582,6 @@ LIMIT 100";
             dateFormat: 'd-m-yy'
         });
     </script>
-<script>
-    $('document').ready(function(){
-        var username_state = false;
-        $('#national_id_2').on('blur', function(){
-            var national_id = $('#national_id_2').val();
-
-            if (national_id == '') {
-                national_id_state = false;
-                return;
-            }
-
-            $.ajax({
-                url: 'check_national_id.php',
-                type: 'post',
-                data: {
-                    'national_id_check' : 1,
-                    'national_id' : national_id,
-                },
-                success: function(response){
-                    if (response == 'taken' ) {
-                        national_id_state = false;
-                        alert("هذا الرقم القومي تم إدخاله مسبقاً  !!!!");
-                        $('#national_id_2').val("");
-                    }
-                }
-            });
-        });
-        $('#national_id').on('blur', function(){
-            var national_id = $('#national_id').val();
-
-            if (national_id == '') {
-                national_id_state = false;
-                return;
-            }
-
-            $.ajax({
-                url: 'php/check_national_id.php',
-                type: 'post',
-                data: {
-                    'national_id_check' : 1,
-                    'national_id' : national_id,
-                },
-                success: function(response){
-                    if (response == 'taken' ) {
-                        national_id_state = false;
-                        alert("هذا الرقم القومي تم إدخاله مسبقاً  !!!!");
-                        $('#national_id').val("");
-                    }
-                }
-            });
-        });
-    });
-</script>
 <?php
 include_once "layout/common_script.php";
 ?>

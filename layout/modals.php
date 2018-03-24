@@ -12,12 +12,12 @@
                             <label for="example-search-input" class="col-md-1 col-form-label">رقم الحيازة</label>
                             <div class="col-md-3">
                                 <div class="form-group has-danger">
-                                    <input required oninvalid="this.setCustomValidity('هذا الحقل إجباري')" oninput="setCustomValidity('')" type="number" name="possession_number" id="possession_number" class="form-control" placeholder="رقم">
+                                    <input required  type="number" name="possession_number" id="possession_number" class="form-control" placeholder="رقم">
                                 </div>
                             </div>
                             <div class="col-md-2">
                                 <div class="form-group has-danger">
-                                    <input required oninvalid="this.setCustomValidity('هذا الحقل إجباري')" oninput="setCustomValidity('')"type="number" name="possession_year" id="possession_year" class="form-control" placeholder="سنة">
+                                    <input required type="number" name="possession_year" id="possession_year" class="form-control" placeholder="سنة">
                                 </div>
                             </div>
                         </div>
@@ -25,12 +25,12 @@
                             <label for="example-search-input" class="col-md-1 col-form-label">رقم القضية</label>
                             <div class="col-md-3">
                                 <div class="form-group has-danger">
-                                    <input required oninvalid="this.setCustomValidity('هذا الحقل إجباري')" oninput="setCustomValidity('')" type="number" name="case_number" id="case_number" class="form-control" placeholder="رقم">
+                                    <input required  type="number" name="case_number" id="case_number" class="form-control" placeholder="رقم">
                                 </div>
                             </div>
                             <div class="col-md-2">
                                 <div class="form-group has-danger">
-                                    <input required oninvalid="this.setCustomValidity('هذا الحقل إجباري')" oninput="setCustomValidity('')" type="number" name="case_year" id="case_year" class="form-control" placeholder="سنة">
+                                    <input required  type="number" name="case_year" id="case_year" class="form-control" placeholder="سنة">
                                 </div>
                             </div>
                             <div class="col-md-3">
@@ -76,13 +76,13 @@
                             <div class="col-md-4">
                                 <div class="form-group has-danger">
                                     <label class="control-label">تاريخ الورود</label>
-                                    <input required oninvalid="this.setCustomValidity('هذا الحقل إجباري')" oninput="setCustomValidity('')"type="text" name="receive_date" id="receive_date" class="form-control date_autoclose" placeholder="تاريخ الورود">
+                                    <input required type="text" name="receive_date" id="receive_date" class="form-control date_autoclose" placeholder="تاريخ الورود">
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group has-danger">
                                     <label class="control-label">موضوع التنازع</label>
-                                    <select required name="subject" oninvalid="this.setCustomValidity('هذا الحقل إجباري')" oninput="setCustomValidity('')"class="select2 form-control custom-select"  style="width: 100%; height:100%;">
+                                    <select required name="subject" class="select2 form-control custom-select"  style="width: 100%; height:100%;">
                                         <option value="" disabled selected></option>
                                         <?php
                                         $query = "SELECT * FROM subject";
@@ -100,7 +100,7 @@
                             <div class="col-md-5">
                                 <div class="form-group has-danger">
                                     <label class="control-label">أسم العضو المعروض عليه القضية</label>
-                                    <select required name="prosecutor" oninvalid="this.setCustomValidity('هذا الحقل إجباري')" oninput="setCustomValidity('')"class="select2 form-control custom-select"  style="width: 100%; height:100%;">
+                                    <select required name="prosecutor" class="select2 form-control custom-select"  style="width: 100%; height:100%;">
                                         <option value="" disabled selected></option>
                                         <?php
                                         $query = "SELECT * FROM prosecutor";
@@ -121,7 +121,7 @@
                             <div class="col-md-8">
                                 <div class="form-group has-danger">
                                     <label class="control-label">أسم الشاكي</label>
-                                    <input required oninvalid="this.setCustomValidity('هذا الحقل إجباري')" oninput="setCustomValidity('')"type="text" name="plaintiff" id="" class="form-control" placeholder="أسم الطرف">
+                                    <input required type="text" name="plaintiff" id="" class="form-control" placeholder="أسم الطرف">
                                 </div>
                             </div>
                             <div class="col-md-4">
@@ -135,7 +135,7 @@
                             <div class="col-md-8">
                                 <div class="form-group has-danger">
                                     <label class="control-label">أسم المشكو في حقه</label>
-                                    <input required oninvalid="this.setCustomValidity('هذا الحقل إجباري')" oninput="setCustomValidity('')"type="text" name="defendant" id="" class="form-control" placeholder="أسم الطرف">
+                                    <input required type="text" name="defendant" id="" class="form-control" placeholder="أسم الطرف">
                                 </div>
                             </div>
                             <div class="col-md-4">
@@ -191,8 +191,8 @@
                             </div>
                         </div>
                         <div class="form-actions">
-                            <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> Save</button>
-                            <button type="button" class="btn btn-inverse">Cancel</button>
+                            <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> تسجيل</button>
+                            <button class="btn btn-inverse"  type="button" data-dismiss="modal">إلغاء</button>
                         </div>
                     </div>
                 </form>

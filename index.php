@@ -35,209 +35,94 @@ include_once "php/functions.php";
                 <!-- Start Page Content -->
                 <!-- ============================================================== -->
                 <!-- Row -->
-                <div class="row">
-                    <!-- Column -->
-                    <div class="col-lg-4 col-md-8">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="d-flex no-block">
-                                    <div class="align-self-center">
-                                        <h2 class="text-muted m-t-10 m-b-0">إجمالي عدد قضايا الحيازة</h2>
-                                        <h2 class="m-t-0">
-                                            <?php
-                                            $count_all_possession_query = mysqli_query($con,"SELECT
+                <div class="card">
+                    <div class="card-header bg-info">
+                        <h4 class="m-b-0 text-white">إحصائية لدفتر الحيازة لسنة <?php echo date('Y') ?></h4>
+                    </div>
+                    <div class="row">
+                        <!-- Column -->
+                        <div class="col-lg-4 col-md-8">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="d-flex no-block">
+                                        <div class="align-self-center">
+                                            <h2 class="text-muted m-t-10 m-b-0">إجمالي عدد قضايا الحيازة</h2>
+                                            <h2 class="m-t-0">
+                                                <?php
+                                                $count_all_possession_query = mysqli_query($con,"SELECT
   Count(DISTINCT possession.possession_number, possession.possession_year) AS Count_possession_number
 FROM
-  possession") or die(mysqli_error($con));
-                                            $count_all_possession_info = mysqli_fetch_assoc($count_all_possession_query);
-                                            echo $count_all_possession_info['Count_possession_number']
-                                            ?>
-                                        </h2>
+  possession
+where possession.possession_year = YEAR(curdate())") or die(mysqli_error($con));
+                                                $count_all_possession_info = mysqli_fetch_assoc($count_all_possession_query);
+                                                echo $count_all_possession_info['Count_possession_number']
+                                                ?>
+                                            </h2>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <!-- Column -->
-                    <!-- Column -->
-                    <div class="col-lg-4 col-md-8">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="d-flex no-block">
-                                    <div class="align-self-center">
-                                        <h2 class="text-muted m-t-10 m-b-0">عدد قضايا الحيازة التي تم إنجازها</h2>
-                                        <h2 class="m-t-0">
-                                            <?php
-                                            $count_done_possession_query = mysqli_query($con,"SELECT
+                        <!-- Column -->
+                        <!-- Column -->
+                        <div class="col-lg-4 col-md-8">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="d-flex no-block">
+                                        <div class="align-self-center">
+                                            <h2 class="text-muted m-t-10 m-b-0">عدد قضايا الحيازة التي تم إنجازها</h2>
+                                            <h2 class="m-t-0">
+                                                <?php
+                                                $count_done_possession_query = mysqli_query($con,"SELECT
   Count(DISTINCT possession.possession_number, possession.possession_year) AS Count_possession_number
 FROM
   possession
 WHERE
-  possession.case_send_number > 0") or die(mysqli_error($con));
-                                            $count_done_possession_info = mysqli_fetch_assoc($count_done_possession_query);
-                                            echo $count_done_possession_info['Count_possession_number']
-                                            ?>
-                                        </h2>
+  possession.case_send_number > 0 AND possession.possession_year = YEAR(curdate())") or die(mysqli_error($con));
+                                                $count_done_possession_info = mysqli_fetch_assoc($count_done_possession_query);
+                                                echo $count_done_possession_info['Count_possession_number']
+                                                ?>
+                                            </h2>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <!-- Column -->
-                    <!-- Column -->
-                    <div class="col-lg-4 col-md-8">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="d-flex no-block">
-                                    <div class="align-self-center">
-                                        <h2 class="text-muted m-t-10 m-b-0">عدد قضايا الحيازة التي لم يتم إنجازها</h2>
-                                        <h2 class="m-t-0">
-                                            <?php
-                                            $count_still_possession_query = mysqli_query($con,"SELECT
+                        <!-- Column -->
+                        <!-- Column -->
+                        <div class="col-lg-4 col-md-8">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="d-flex no-block">
+                                        <div class="align-self-center">
+                                            <h2 class="text-muted m-t-10 m-b-0">عدد قضايا الحيازة التي لم يتم إنجازها</h2>
+                                            <h2 class="m-t-0">
+                                                <?php
+                                                $count_still_possession_query = mysqli_query($con,"SELECT
   Count(DISTINCT possession.possession_number, possession.possession_year) AS Count_possession_number
 FROM
   possession
 WHERE
-  possession.case_send_number = 0") or die(mysqli_error($con));
-                                            $count_still_possession_info = mysqli_fetch_assoc($count_still_possession_query);
-                                            echo $count_still_possession_info['Count_possession_number']
-                                            ?>
-                                        </h2>
+  possession.case_send_number = 0 AND possession.possession_year = YEAR(curdate())") or die(mysqli_error($con));
+                                                $count_still_possession_info = mysqli_fetch_assoc($count_still_possession_query);
+                                                echo $count_still_possession_info['Count_possession_number'];
+                                                ?>
+                                            </h2>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        <!-- Column -->
                     </div>
-                    <!-- Column -->
+                    <!-- Row -->
+                    <div class="row">
+                        <?php
+                        include_once "layout/index_charts.php";
+                        ?>
+                    </div>
                 </div>
                 <!-- Row -->
-                <div class="row">
-                    <!-- Column -->
-                    <div class="col-lg-3 col-md-6">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="d-flex no-block">
-                                    <div class="m-r-20 align-self-center"><span class="lstick m-r-20"></span><img src="assets/images/icon/income.png" alt="Income" /></div>
-                                    <div class="align-self-center">
-                                        <h6 class="text-muted m-t-10 m-b-0">Total Income</h6>
-                                        <h2 class="m-t-0">953,000</h2></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Column -->
-                    <!-- Column -->
-                    <div class="col-lg-3 col-md-6">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-12">
-                                        <h3>40%</h3>
-                                        <h6 class="card-subtitle">Pending Product</h6></div>
-                                    <div class="col-12">
-                                        <div class="progress">
-                                            <div class="progress-bar bg-info" role="progressbar" style="width: 40%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Column -->
-                    <!-- Column -->
-                    <div class="col-lg-3 col-md-6">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-12">
-                                        <h3>56%</h3>
-                                        <h6 class="card-subtitle">Product A</h6></div>
-                                    <div class="col-12">
-                                        <div class="progress">
-                                            <div class="progress-bar bg-danger" role="progressbar" style="width: 56%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Column -->
-                    <!-- Column -->
-                    <div class="col-lg-3 col-md-6">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-12">
-                                        <h3>26%</h3>
-                                        <h6 class="card-subtitle">Product B</h6></div>
-                                    <div class="col-12">
-                                        <div class="progress">
-                                            <div class="progress-bar bg-inverse" role="progressbar" style="width: 26%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Column -->
-                </div>
-                <!-- Row -->
-                <div class="row">
-                    <!-- Column -->
-                    <div class="col-md-6 col-lg-4 col-xlg-2">
-                        <div class="card">
-                            <div class="box bg-info text-center">
-                                <h1 class="font-light text-white">2,064</h1>
-                                <h6 class="text-white">Sessions</h6>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Column -->
-                    <div class="col-md-6 col-lg-4 col-xlg-2">
-                        <div class="card">
-                            <div class="box bg-primary text-center">
-                                <h1 class="font-light text-white">1,738</h1>
-                                <h6 class="text-white">Users</h6>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Column -->
-                    <div class="col-md-6 col-lg-4 col-xlg-2">
-                        <div class="card">
-                            <div class="box bg-success text-center">
-                                <h1 class="font-light text-white">5963</h1>
-                                <h6 class="text-white">Page Views</h6>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Column -->
-                    <div class="col-md-6 col-lg-4 col-xlg-2">
-                        <div class="card">
-                            <div class="box bg-dark text-center">
-                                <h1 class="font-light text-white">2.9s</h1>
-                                <h6 class="text-white">Pages/Session</h6>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Column -->
-                    <div class="col-md-6 col-lg-4 col-xlg-2">
-                        <div class="card">
-                            <div class="box bg-megna text-center">
-                                <h1 class="font-light text-white">1.5s</h1>
-                                <h6 class="text-white">Avg. Session</h6>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Column -->
-                    <div class="col-md-6 col-lg-4 col-xlg-2">
-                        <div class="card">
-                            <div class="box bg-warning text-center">
-                                <h1 class="font-light text-white">10%</h1>
-                                <h6 class="text-white">Bounce Rate</h6>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <!-- ============================================================== -->
                 <!-- End PAge Content -->
             </div>

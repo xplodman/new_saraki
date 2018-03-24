@@ -16,14 +16,56 @@ $plaintiff=$_POST['plaintiff'];
 $plaintiff_id=$_POST['plaintiff_id'];
 $defendant=$_POST['defendant'];
 $defendant_id=$_POST['defendant_id'];
-$completion_send_date = date('Y-m-d', strtotime(str_replace('/', '-', $_POST['completion_send_date'])));
-$completion_delegate=$_POST['completion_delegate'];
-$completion_receive_date = date('Y-m-d', strtotime(str_replace('/', '-', $_POST['completion_receive_date'])));
-$prosecution_decision=$_POST['prosecution_decision'];
-$case_send_date = date('Y-m-d', strtotime(str_replace('/', '-', $_POST['case_send_date'])));
-$case_send_number=$_POST['case_send_number'];
 
-$insert_possession = mysqli_query($con, "INSERT INTO `cj_family`.`possession` (`possession_number`, `possession_year`, `case_receive_date`, `prosecutor_id`, `completion_send_date`, `completion_delegate`, `completion_receive_date`, `prosecution_decision`, `case_send_date`, `case_send_number`, `createdate`, `updatedate`, `status`, `deleted`, `users_id`, `subject_id`) VALUES ('$possession_number', '$possession_year', '$receive_date', '$prosecutor', '$completion_send_date', '$completion_delegate', '$completion_receive_date', '$prosecution_decision', '$case_send_date', '$case_send_number', CURRENT_TIMESTAMP, NULL, '1', '0', '2', '2');");
+
+if (!empty($_POST['completion_send_date'])) {
+    $completion_send_date = date('Y-m-d', strtotime(str_replace('/', '-', $_POST['completion_send_date'])));
+}else{
+    $completion_send_date = $_POST['completion_send_date'];
+    $completion_send_date = NULL;
+}
+
+if (!empty($_POST['completion_delegate'])) {
+    $completion_delegate = $_POST['completion_delegate'];
+}else{
+    $completion_delegate = $_POST['completion_delegate'];
+    $completion_delegate = NULL;
+}
+
+if (!empty($_POST['completion_receive_date'])) {
+    $completion_receive_date = date('Y-m-d', strtotime(str_replace('/', '-', $_POST['completion_receive_date'])));
+}else{
+    $completion_receive_date = $_POST['completion_receive_date'];
+    $completion_receive_date = NULL;
+}
+
+if (!empty($_POST['prosecution_decision'])) {
+    $prosecution_decision = $_POST['prosecution_decision'];
+}else{
+    $prosecution_decision = $_POST['prosecution_decision'];
+    $prosecution_decision = NULL;
+}
+
+if (!empty($_POST['case_send_date'])) {
+    $case_send_date = date('Y-m-d', strtotime(str_replace('/', '-', $_POST['case_send_date'])));
+}else{
+    $case_send_date = $_POST['case_send_date'];
+    $case_send_date = NULL;
+}
+
+if (!empty($_POST['case_send_number'])) {
+    $case_send_number = $_POST['case_send_number'];
+}else{
+    $case_send_number = $_POST['case_send_number'];
+    $case_send_number = NULL;
+}
+
+$max_possession_id = mysqli_query($con, "SELECT MAX(id) FROM `cj_family`.`possession`");
+$max_possession_id = mysqli_fetch_row($max_possession_id);
+$max_possession_id = implode("", $max_possession_id);
+$max_possession_id = $max_possession_id+1;
+
+$insert_possession = mysqli_query($con, "INSERT INTO `cj_family`.`possession` (`possession_number`, `possession_year`, `case_receive_date`, `prosecutor_id`, `completion_send_date`, `completion_delegate`, `completion_receive_date`, `prosecution_decision`, `case_send_date`, `case_send_number`, `createdate`, `updatedate`, `status`, `deleted`, `users_id`, `subject_id`, `id`) VALUES ('$possession_number', '$possession_year', '$receive_date', '$prosecutor', '$completion_send_date', '$completion_delegate', '$completion_receive_date', '$prosecution_decision', '$case_send_date', '$case_send_number', CURRENT_TIMESTAMP, NULL, '1', '0', '2', '2', '$max_possession_id');");
 
 if ($insert_possession) {
     $max_case_id = mysqli_query($con, "SELECT MAX(id) FROM `cj_family`.`case`");

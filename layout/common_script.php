@@ -36,10 +36,66 @@
             }
             ?>
 
-            hideAfter: 3500
+            hideAfter: 6000
         });
         <?php
         }
         ?>
     });
 </script>
+<script>
+    $('document').ready(function(){
+        var username_state = false;
+        $('#national_id_2').on('blur', function(){
+            var national_id = $('#national_id_2').val();
+
+            if (national_id == '') {
+                national_id_state = false;
+                return;
+            }
+
+            $.ajax({
+                url: 'php/check_national_id.php',
+                type: 'post',
+                data: {
+                    'national_id_check' : 1,
+                    'national_id' : national_id,
+                },
+                success: function(response){
+                    if (response == 'taken' ) {
+                        national_id_state = false;
+                        alert("هذا الرقم القومي تم إدخاله مسبقاً  !!!!");
+                        $('#national_id_2').val("");
+                    }
+                }
+            });
+        });
+        $('#national_id').on('blur', function(){
+            var national_id = $('#national_id').val();
+
+            if (national_id == '') {
+                national_id_state = false;
+                return;
+            }
+
+            $.ajax({
+                url: 'php/check_national_id.php',
+                type: 'post',
+                data: {
+                    'national_id_check' : 1,
+                    'national_id' : national_id,
+                },
+                success: function(response){
+                    if (response == 'taken' ) {
+                        national_id_state = false;
+                        alert("هذا الرقم القومي تم إدخاله مسبقاً  !!!!");
+                        $('#national_id').val("");
+                    }
+                }
+            });
+        });
+    });
+</script>
+<?php
+mysqli_close($con);
+?>
