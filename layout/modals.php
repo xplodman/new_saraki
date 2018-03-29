@@ -127,7 +127,7 @@
                             <div class="col-md-4">
                                 <div class="form-group has-danger">
                                     <label class="control-label">الرقم القومي</label>
-                                    <input required oninvalid="this.setCustomValidity('برجاء إدخال رقم قومي صحيح')" oninput="setCustomValidity('')" type="text" name="plaintiff_id" id="national_id" class="form-control" placeholder="الرقم القومي" onkeypress="return isNumberKey(event)" minlength="14" maxlength="14">
+                                    <input required oninvalid="this.setCustomValidity('برجاء إدخال رقم قومي صحيح')" oninput="setCustomValidity('')" type="text" name="plaintiff_id" id="national_id" class="form-control" placeholder="الرقم القومي" onchange="check_national_id(this)" onkeypress="return isNumberKey(event)" minlength="14" maxlength="14">
                                 </div>
                             </div>
                         </div>
@@ -141,7 +141,7 @@
                             <div class="col-md-4">
                                 <div class="form-group has-danger">
                                     <label class="control-label">الرقم القومي</label>
-                                    <input required oninvalid="this.setCustomValidity('برجاء إدخال رقم قومي صحيح')" oninput="setCustomValidity('')"type="text" name="defendant_id" id="national_id_2" class="form-control" placeholder="الرقم القومي"  onkeypress="return isNumberKey(event)" minlength="14" maxlength="14">
+                                    <input required oninvalid="this.setCustomValidity('برجاء إدخال رقم قومي صحيح')" oninput="setCustomValidity('')"type="text" name="defendant_id" id="national_id_2" class="form-control" placeholder="الرقم القومي" onchange="check_national_id(this)"  onkeypress="return isNumberKey(event)" minlength="14" maxlength="14">
                                 </div>
                             </div>
                         </div>
@@ -192,7 +192,7 @@
                         </div>
                         <div class="form-actions">
                             <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> تسجيل</button>
-                            <button class="btn btn-inverse"  type="button" data-dismiss="modal">إلغاء</button>
+                            <button class="btn btn-inverse" type="button" data-dismiss="modal">إلغاء</button>
                         </div>
                     </div>
                 </form>

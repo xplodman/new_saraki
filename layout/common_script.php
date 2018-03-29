@@ -96,6 +96,64 @@
         });
     });
 </script>
+<script>
+    function check_national_id(element) {
+        var textvalue = element.value;
+        var textLength = textvalue.length;
+        if(textLength != 14)
+        {
+            //red
+            element.style.backgroundColor = "#FE7276";
+        }
+        else
+        {
+            //green
+            if (textvalue == '') {
+                national_id_state = false;
+                return;
+            }
+
+            $.ajax({
+                url: 'php/test_check_national_id.php',
+                type: 'post',
+                data: {
+                    'national_id_check' : 1,
+                    'national_id' : textvalue,
+                },
+                success: function(response){
+                    if (response == '0' ) {
+                        element.style.backgroundColor = "#00FF00";
+                    }
+                    if (response == '1' ) {
+                        national_id_state = false;
+                        element.style.backgroundColor = "#FE7276";
+                    }
+                    if (response == '2' ) {
+                        national_id_state = false;
+                        element.style.backgroundColor = "#FE7276";
+                    }
+                    if (response == '3' ) {
+                        national_id_state = false;
+                        element.style.backgroundColor = "#FE7276";
+                    }
+                    if (response == '4' ) {
+                        national_id_state = false;
+                        element.style.backgroundColor = "#FE7276";
+                    }
+                    if (response == '5' ) {
+                        national_id_state = false;
+                        element.style.backgroundColor = "#FE7276";
+                    }
+                    if (response == '6' ) {
+                        national_id_state = false;
+                        element.style.backgroundColor = "#FE7276";
+//                        $(':input[type="submit"]').prop('disabled', true);
+                    }
+                }
+            });
+        }
+    }
+</script>
 <?php
 mysqli_close($con);
 ?>
