@@ -97,13 +97,14 @@
     });
 </script>
 <script>
-    function check_national_id(element) {
+    function check_national_id_1(element) {
         var textvalue = element.value;
         var textLength = textvalue.length;
         if(textLength != 14)
         {
             //red
             element.style.backgroundColor = "#FE7276";
+            $('#national_id_check_1').prop('checked', false);
         }
         else
         {
@@ -123,30 +124,103 @@
                 success: function(response){
                     if (response == '0' ) {
                         element.style.backgroundColor = "#00FF00";
+                        $('#national_id_check_1').prop('checked', true);
                     }
                     if (response == '1' ) {
                         national_id_state = false;
                         element.style.backgroundColor = "#FE7276";
+                        $('#national_id_check_1').prop('checked', false);
                     }
                     if (response == '2' ) {
                         national_id_state = false;
                         element.style.backgroundColor = "#FE7276";
+                        $('#national_id_check_1').prop('checked', false);
                     }
                     if (response == '3' ) {
                         national_id_state = false;
                         element.style.backgroundColor = "#FE7276";
+                        $('#national_id_check_1').prop('checked', false);
                     }
                     if (response == '4' ) {
                         national_id_state = false;
                         element.style.backgroundColor = "#FE7276";
+                        $('#national_id_check_1').prop('checked', false);
                     }
                     if (response == '5' ) {
                         national_id_state = false;
                         element.style.backgroundColor = "#FE7276";
+                        $('#national_id_check_1').prop('checked', false);
                     }
                     if (response == '6' ) {
                         national_id_state = false;
                         element.style.backgroundColor = "#FE7276";
+                        $('#national_id_check_1').prop('checked', false);
+//                        $(':input[type="submit"]').prop('disabled', true);
+                    }
+                }
+            });
+        }
+    }
+</script>
+<script>
+    function check_national_id_2(element) {
+        var textvalue = element.value;
+        var textLength = textvalue.length;
+        if(textLength != 14)
+        {
+            //red
+            element.style.backgroundColor = "#FE7276";
+            $('#national_id_check_2').prop('checked', false);
+        }
+        else
+        {
+            //green
+            if (textvalue == '') {
+                national_id_state = false;
+                return;
+            }
+
+            $.ajax({
+                url: 'php/test_check_national_id.php',
+                type: 'post',
+                data: {
+                    'national_id_check' : 1,
+                    'national_id' : textvalue,
+                },
+                success: function(response){
+                    if (response == '0' ) {
+                        element.style.backgroundColor = "#00FF00";
+                        $('#national_id_check_2').prop('checked', true);
+                    }
+                    if (response == '1' ) {
+                        national_id_state = false;
+                        element.style.backgroundColor = "#FE7276";
+                        $('#national_id_check_2').prop('checked', false);
+                    }
+                    if (response == '2' ) {
+                        national_id_state = false;
+                        element.style.backgroundColor = "#FE7276";
+                        $('#national_id_check_2').prop('checked', false);
+                    }
+                    if (response == '3' ) {
+                        national_id_state = false;
+                        element.style.backgroundColor = "#FE7276";
+                        $('#national_id_check_2').prop('checked', false);
+                    }
+                    if (response == '4' ) {
+                        national_id_state = false;
+                        element.style.backgroundColor = "#FE7276";
+                        $('#national_id_check_2').prop('checked', false);
+                    }
+                    if (response == '5' ) {
+                        national_id_state = false;
+                        element.style.backgroundColor = "#FE7276";
+                        $('#national_id_check_2').prop('checked', false);
+                    }
+                    if (response == '6' ) {
+                        national_id_state = false;
+                        element.style.backgroundColor = "#FE7276";
+                        $('#national_id_check_2').prop('checked', false);
 //                        $(':input[type="submit"]').prop('disabled', true);
                     }
                 }

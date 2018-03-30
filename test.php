@@ -37,8 +37,16 @@
 <body>
 
 <div>
+    <form>
+
     <span id="status">Please enter a valid National Insurance Number.</span><br>
+    <div id="divCheckbox" style="display: none;">
+        <input type="checkbox" required id="test" >
+    </div>
     <input type="text" id="myTextBox" name="myTextBox" oninput="checkLength(this)">
+        <button type="submit">adasdasd</button>
+    </form>
+
 </div>
 <script>
     function checkLength(element) {
@@ -67,30 +75,37 @@
                 success: function(response){
                     if (response == '0' ) {
                         element.style.backgroundColor = "#00FF00";
+                        $('#test').prop('checked', true);
                     }
                     if (response == '1' ) {
                         national_id_state = false;
                         element.style.backgroundColor = "#FF0000";
+                        $('#test').prop('checked', false);
                     }
                     if (response == '2' ) {
                         national_id_state = false;
                         element.style.backgroundColor = "#FF0000";
+                        $('#test').prop('checked', false);
                     }
                     if (response == '3' ) {
                         national_id_state = false;
                         element.style.backgroundColor = "#FF0000";
+                        $('#test').prop('checked', false);
                     }
                     if (response == '4' ) {
                         national_id_state = false;
                         element.style.backgroundColor = "#FF0000";
+                        $('#test').prop('checked', false);
                     }
                     if (response == '5' ) {
                         national_id_state = false;
                         element.style.backgroundColor = "#FF0000";
+                        $('#test').prop('checked', false);
                     }
                     if (response == '6' ) {
                         national_id_state = false;
                         element.style.backgroundColor = "#FF0000";
+                        $('#test').prop('checked', false);
                     }
                 }
             });
