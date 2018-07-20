@@ -16,8 +16,11 @@
                                     الدفاتر
                                 </span>
                             </a>
+<!--                            <ul aria-expanded="false" class="collapse">-->
+<!--                                <li><a href="possession.php">حيازة</a></li>-->
+<!--                            </ul>-->
                             <ul aria-expanded="false" class="collapse">
-                                <li><a href="possession.php">حيازة</a></li>
+                                <li><a href="investigation.php">حصر التحقيق</a></li>
                             </ul>
                         </li>
                     </ul>

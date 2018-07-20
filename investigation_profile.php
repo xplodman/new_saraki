@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" dir="rtl">
 <?php
-$pageTitle = 'حيازة';
+$pageTitle = 'حصر التحقيق';
 include_once "layout/header.php";
 include_once "php/check_authentication.php";
 ?>
@@ -36,62 +36,44 @@ include_once "php/check_authentication.php";
             <!-- ============================================================== -->
             <div class="row page-titles">
                 <div class="col-md-10 align-self-center">
-                    <h3 class="text-themecolor">دفتر / حيازة</h3>
+                    <h3 class="text-themecolor">دفتر / حصر التحقيق</h3>
                 </div>
             </div>
             <!-- ============================================================== -->
             <!-- search form -->
             <!-- ============================================================== -->
             <?php
-                $possession_query="
+                $investigation_query="
 SELECT
-`case`.id,
-possession.case_receive_date,
-possession.completion_send_date,
-possession.completion_delegate,
-possession.completion_receive_date,
-possession.prosecution_decision,
-possession.case_send_date,
-possession.id AS possession_id,
-possession.case_send_number,
-main_ledger.id AS main_ledger_id,
-main_ledger.name AS main_ledger_name,
-depart.id AS depart_id,
-depart.name AS depart_name,
-subject.name AS subject_name,
-subject.id AS subject_id,
-prosecutor.id AS prosecutor_id,
-prosecutor.name AS prosecutor_name,
-possession.possession_number,
-possession.possession_year,
-`case`.case_number,
-`case`.case_year,
-`case`.id AS case_id
+  case_has_investigation.investigation_number,
+  case_has_investigation.investigation_year,
+  `case`.case_number,
+  `case`.case_year,
+  depart.name AS depart_name,
+  depart.id AS depart_id,
+  main_ledger.name AS main_ledger_name,
+  main_ledger.id AS main_ledger_id,
+  case_has_investigation.case_status_idcase_status,
+  users.nickname,
+  prosecutor.id AS prosecutor_id,
+  prosecutor.name AS prosecutor_name,
+  case_has_investigation.id_case_has_investigation,
+  case_has_investigation.createdate,
+  case_status.idcase_status,
+  case_status.name AS case_status_name,
+  `case`.id AS case_id
 FROM
-`case`
-INNER JOIN case_has_possession ON `case`.id = case_has_possession.case_id
-INNER JOIN possession ON case_has_possession.possession_possession_number = possession.possession_number AND
-case_has_possession.possession_possession_year = possession.possession_year
-INNER JOIN depart ON `case`.depart_id = depart.id
-INNER JOIN main_ledger ON `case`.main_ledger_id = main_ledger.id
-INNER JOIN subject ON possession.subject_id = subject.id
-INNER JOIN prosecutor ON possession.prosecutor_id = prosecutor.id
-LEFT JOIN person_has_case ON `case`.id = person_has_case.case_id
-INNER JOIN person ON person_has_case.person_id = person.id
+  case_has_investigation
+  INNER JOIN `case` ON case_has_investigation.case_id = `case`.id
+  INNER JOIN depart ON `case`.depart_id = depart.id
+  INNER JOIN main_ledger ON `case`.main_ledger_id = main_ledger.id
+  INNER JOIN users ON case_has_investigation.users_id = users.id
+  INNER JOIN prosecutor ON case_has_investigation.prosecutor_id = prosecutor.id
+  INNER JOIN case_status ON case_has_investigation.case_status_idcase_status = case_status.idcase_status
 WHERE
-`case`.deleted = 0 AND
-`case`.status = 1 AND
-possession.status = 1 AND
-possession.deleted = 0 AND
-depart.status = 1 AND
-depart.deleted = 0 AND
-main_ledger.status = 1 AND
-main_ledger.deleted = 0 AND
-possession.id = $_GET[id]
-ORDER BY
-possession.possession_year DESC ,
-possession.possession_number DESC 
-LIMIT 100";?>
+  case_has_investigation.status = 1 AND
+  case_has_investigation.deleted = 0 AND
+  case_has_investigation.id_case_has_investigation = $_GET[id]";?>
             <!-- ============================================================== -->
             <!-- end of search form -->
             <!-- ============================================================== -->
@@ -108,27 +90,27 @@ LIMIT 100";?>
                         </a>
                         <div class="card-body">
                                 <?php
-                                $result = mysqli_query($con, $possession_query);
-                                $possession_info = mysqli_fetch_assoc($result);
+                                $result = mysqli_query($con, $investigation_query);
+                                $investigation_info = mysqli_fetch_assoc($result);
                                 ?>
-                            <form method="post" action="php/edit_possession_record.php?id=<?php echo $_GET['id']; ?>">
+                            <form method="post" action="php/edit_investigation_record.php?id=<?php echo $_GET['id']; ?>">
 
-                                <input type="hidden" name="possession_id" id="possession_id" value="<?php echo $possession_info['possession_id']; ?>">
-                                <input type="hidden" name="case_id" id="case_id" value="<?php echo $possession_info['case_id']; ?>">
+                                <input type="hidden" name="investigation_id" id="investigation_id" value="<?php echo $investigation_info['id_case_has_investigation']; ?>">
+                                <input type="hidden" name="case_id" id="case_id" value="<?php echo $investigation_info['case_id']; ?>">
 
                                 <div class="form-body">
                                     <div class="form-group row">
-                                        <label for="example-search-input" class="col-md-1 col-form-label">رقم الحيازة</label>
+                                        <label for="example-search-input" class="col-md-1 col-form-label">رقم الحصر</label>
                                         <div class="col-md-3">
                                             <label class="col-md-12 col-form-label">الرقم</label>
                                             <div class="form-group has-danger">
-                                                <input required oninvalid="this.setCustomValidity('هذا الحقل إجباري')" oninput="setCustomValidity('')" type="number" name="possession_number" id="possession_number" class="form-control" placeholder="رقم" value="<?php echo $possession_info['possession_number']; ?>">
+                                                <input required oninvalid="this.setCustomValidity('هذا الحقل إجباري')" oninput="setCustomValidity('')" type="number" name="investigation_number" id="investigation_number" class="form-control" placeholder="رقم" value="<?php echo $investigation_info['investigation_number']; ?>">
                                             </div>
                                         </div>
                                         <div class="col-md-2">
                                             <label class="col-md-12 col-form-label">السنة</label>
                                             <div class="form-group has-danger">
-                                                <input required oninvalid="this.setCustomValidity('هذا الحقل إجباري')" oninput="setCustomValidity('')"type="number" name="possession_year" id="possession_year" class="form-control" placeholder="سنة" value="<?php echo $possession_info['possession_year']; ?>">
+                                                <input required oninvalid="this.setCustomValidity('هذا الحقل إجباري')" oninput="setCustomValidity('')"type="number" name="investigation_year" id="investigation_year" class="form-control" placeholder="سنة" value="<?php echo $investigation_info['investigation_year']; ?>">
                                             </div>
                                         </div>
                                     </div>
@@ -137,13 +119,13 @@ LIMIT 100";?>
                                         <div class="col-md-3">
                                             <label class="col-md-12 col-form-label">الرقم</label>
                                             <div class="form-group has-danger">
-                                                <input required oninvalid="this.setCustomValidity('هذا الحقل إجباري')" oninput="setCustomValidity('')" type="number" name="case_number" id="case_number" class="form-control" placeholder="رقم" value="<?php echo $possession_info['case_number']; ?>">
+                                                <input required oninvalid="this.setCustomValidity('هذا الحقل إجباري')" oninput="setCustomValidity('')" type="number" name="case_number" id="case_number" class="form-control" placeholder="رقم" value="<?php echo $investigation_info['case_number']; ?>">
                                             </div>
                                         </div>
                                         <div class="col-md-2">
                                             <label class="col-md-12 col-form-label">السنة</label>
                                             <div class="form-group has-danger">
-                                                <input required oninvalid="this.setCustomValidity('هذا الحقل إجباري')" oninput="setCustomValidity('')" type="number" name="case_year" id="case_year" class="form-control" placeholder="سنة" value="<?php echo $possession_info['case_year']; ?>">
+                                                <input required oninvalid="this.setCustomValidity('هذا الحقل إجباري')" oninput="setCustomValidity('')" type="number" name="case_year" id="case_year" class="form-control" placeholder="سنة" value="<?php echo $investigation_info['case_year']; ?>">
                                             </div>
                                         </div>
                                         <div class="col-md-3">
@@ -160,7 +142,7 @@ LIMIT 100";?>
                                                         <option
                                                             <?php
                                                             if (!empty($main_ledger)) {
-                                                                if((int)$possession_info['main_ledger_id'] == (int)$main_ledger['id']){
+                                                                if((int)$investigation_info['main_ledger_id'] == (int)$main_ledger['id']){
                                                                     echo 'selected';
                                                                 }
                                                             }
@@ -186,7 +168,7 @@ LIMIT 100";?>
                                                         <option
                                                             <?php
                                                             if (!empty($depart)) {
-                                                                if((int)$possession_info['depart_id'] == (int)$depart['id']){
+                                                                if((int)$investigation_info['depart_id'] == (int)$depart['id']){
                                                                     echo 'selected';
                                                                 }
                                                             }
@@ -204,47 +186,122 @@ LIMIT 100";?>
                                     </div>
                                     <!--/row-->
                                     <div class="row">
-                                        <div class="col-md-4">
+                                        <div class="col-md-12">
                                             <div class="form-group has-danger">
-                                                <label class="control-label">تاريخ الورود</label>
-                                                <input required oninvalid="this.setCustomValidity('هذا الحقل إجباري')" oninput="setCustomValidity('')"type="text" name="receive_date" id="receive_date" class="form-control date_autoclose" value="<?php
-                                                if ($possession_info['case_receive_date']>1){
-                                                    echo date("j/n/Y", strtotime($possession_info['case_receive_date']));
-                                                }
-                                                ?>">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group has-danger">
-                                                <label class="control-label">موضوع التنازع</label>
-                                                <select required name="subject" oninvalid="this.setCustomValidity('هذا الحقل إجباري')" oninput="setCustomValidity('')"class="select2 form-control custom-select"  style="width: 100%; height:100%;">
-                                                    <option value="" disabled selected></option>
+                                                <label class="control-label">التهم</label>
+                                                <select multiple="multiple" class="form-control custom-select bootstrapDualListbox" name="charges[]">
                                                     <?php
-                                                    $query = "SELECT * FROM subject";
+                                                    $query = "SELECT
+  charges.name AS charges_name,
+  charges.id_charges
+FROM
+  charges
+  INNER JOIN case_has_investigation_has_charges ON case_has_investigation_has_charges.charges_id_charges =
+    charges.id_charges
+WHERE
+  case_has_investigation_has_charges.case_has_investigation_id_case_has_investigation = $investigation_info[id_case_has_investigation]
+  GROUP BY charges.id_charges";
                                                     $results=mysqli_query($con, $query);
                                                     //loop
-                                                    foreach ($results as $subject){
+                                                    foreach ($results as $charges){
                                                         ?>
-                                                        <option
-                                                            <?php
-                                                            if (!empty($subject)) {
-                                                                if((int)$possession_info['subject_id'] == (int)$subject['id']){
-                                                                    echo 'selected';
-                                                                }
-                                                            }
-                                                            ?>
-                                                            value="<?php echo $subject["id"];?>"><?php echo $subject["name"];?></option>
+                                                        <option selected value="<?php echo $charges["id_charges"];?>"><?php echo $charges["charges_name"];?></option>
+                                                        <?php
+                                                    }
+                                                    ?>
+                                                    <?php
+                                                    $query = "SELECT
+  charges.name AS charges_name,
+  charges.id_charges
+FROM
+  charges
+  INNER JOIN case_has_investigation_has_charges ON case_has_investigation_has_charges.charges_id_charges =
+    charges.id_charges
+WHERE
+  charges.id_charges not in (SELECT
+  charges.id_charges
+FROM
+  charges
+  INNER JOIN case_has_investigation_has_charges ON case_has_investigation_has_charges.charges_id_charges =
+    charges.id_charges
+WHERE
+  case_has_investigation_has_charges.case_has_investigation_id_case_has_investigation = $investigation_info[id_case_has_investigation]
+  GROUP BY charges.id_charges)
+  GROUP BY charges.id_charges";
+                                                    $results=mysqli_query($con, $query);
+                                                    //loop
+                                                    foreach ($results as $charges){
+                                                        ?>
+                                                        <option value="<?php echo $charges["id_charges"];?>"><?php echo $charges["charges_name"];?></option>
+                                                        <?php
+                                                    }
+                                                    ?>
+                                                </select>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--/row-->
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group has-danger">
+                                                <label class="control-label">سبب البقاء</label>
+                                                <select multiple="multiple" class="form-control custom-select bootstrapDualListbox" name="reason_to_done[]">
+                                                    <?php
+                                                    $query = "SELECT
+  reason_to_done.id_reason_to_done,
+  reason_to_done.name AS reason_to_done_name
+FROM
+  reason_to_done
+  INNER JOIN case_has_investigation_has_reason_to_done ON
+    case_has_investigation_has_reason_to_done.reason_to_done_id_reason_to_done = reason_to_done.id_reason_to_done
+WHERE
+  case_has_investigation_has_reason_to_done.case_has_investigation_id_case_has_investigation = $investigation_info[id_case_has_investigation]
+  GROUP BY reason_to_done.id_reason_to_done";
+                                                    $results=mysqli_query($con, $query);
+                                                    //loop
+                                                    foreach ($results as $reason_to_done){
+                                                        ?>
+                                                        <option selected value="<?php echo $reason_to_done["id_reason_to_done"];?>"><?php echo $reason_to_done["reason_to_done_name"];?></option>
+                                                        <?php
+                                                    }
+                                                    ?>
+                                                    <?php
+                                                    $query = "SELECT
+  reason_to_done.id_reason_to_done,
+  reason_to_done.name AS reason_to_done_name
+FROM
+  reason_to_done
+WHERE
+  reason_to_done.id_reason_to_done NOT IN (
+  SELECT
+  reason_to_done.id_reason_to_done
+FROM
+  reason_to_done
+  INNER JOIN case_has_investigation_has_reason_to_done ON
+    case_has_investigation_has_reason_to_done.reason_to_done_id_reason_to_done = reason_to_done.id_reason_to_done
+WHERE
+  case_has_investigation_has_reason_to_done.case_has_investigation_id_case_has_investigation = $investigation_info[id_case_has_investigation]
+  GROUP BY reason_to_done.id_reason_to_done)
+  GROUP BY reason_to_done.id_reason_to_done";
+                                                    $results=mysqli_query($con, $query);
+                                                    //loop
+                                                    foreach ($results as $reason_to_done){
+                                                        ?>
+                                                        <option value="<?php echo $reason_to_done["id_reason_to_done"];?>"><?php echo $reason_to_done["reason_to_done_name"];?></option>
                                                         <?php
                                                     }
                                                     ?>
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="col-md-5">
+                                    </div>
+                                    <!--/row-->
+                                    <div class="row">
+                                        <div class="col-md-8">
                                             <div class="form-group has-danger">
                                                 <label class="control-label">أسم العضو المعروض عليه القضية</label>
-                                                <select required name="prosecutor" oninvalid="this.setCustomValidity('هذا الحقل إجباري')" oninput="setCustomValidity('')"class="select2 form-control custom-select"  style="width: 100%; height:100%;">
-                                                    <option value="" disabled selected></option>
+                                                <select required name="prosecutor" class="select2 form-control custom-select"  style="width: 100%; height:100%;">
                                                     <?php
                                                     $query = "SELECT * FROM prosecutor";
                                                     $results=mysqli_query($con, $query);
@@ -254,7 +311,7 @@ LIMIT 100";?>
                                                         <option
                                                             <?php
                                                             if (!empty($prosecutor)) {
-                                                                if((int)$possession_info['prosecutor_id'] == (int)$prosecutor['id']){
+                                                                if((int)$investigation_info['prosecutor_id'] == (int)$prosecutor['id']){
                                                                     echo 'selected';
                                                                 }
                                                             }
@@ -266,64 +323,38 @@ LIMIT 100";?>
                                                 </select>
                                             </div>
                                         </div>
-                                    </div>
-                                    <!--/row-->
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <div class="form-group has-success">
-                                                <label class="control-label">تاريخ قرار الإستيفاء</label>
-                                                <input type="text" name="completion_send_date" class="form-control date_autoclose" value="<?php
-                                                if ($possession_info['completion_send_date']>1){
-                                                    echo date("j/n/Y", strtotime($possession_info['completion_send_date']));
-                                                }
-                                                ?>">
-                                            </div>
-                                        </div>
                                         <div class="col-md-4">
-                                            <div class="form-group has-success">
-                                                <label class="control-label">أسم المندوب</label>
-                                                <input type="text" name="completion_delegate" id="" class="form-control" placeholder="أسم المندوب" value="<?php echo $possession_info['completion_delegate']; ?>">
+                                            <div class="form-group has-danger">
+                                                <label class="control-label">حالة القضية</label>
+                                                <select required name="case_status" class="select2 form-control custom-select"  style="width: 100%; height:100%;">
+                                                    <option value="" disabled selected></option>
+                                                    <?php
+                                                    $query = "SELECT
+                                                      case_status.idcase_status,
+                                                      case_status.name AS case_status_name
+                                                    FROM
+                                                      case_status";
+                                                    $results=mysqli_query($con, $query);
+                                                    //loop
+                                                    foreach ($results as $case_status){
+                                                        ?>
+                                                        <option
+                                                            <?php
+                                                            if (!empty($case_status)) {
+                                                                if((int)$investigation_info['idcase_status'] == (int)$case_status['idcase_status']){
+                                                                    echo 'selected';
+                                                                }
+                                                            }
+                                                            ?>
+                                                            value="<?php echo $case_status["idcase_status"];?>"><?php echo $case_status["case_status_name"];?></option>
+                                                        <?php
+                                                    }
+                                                    ?>
+                                                </select>
                                             </div>
                                         </div>
                                     </div>
                                     <!--/row-->
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <div class="form-group has-success">
-                                                <label class="control-label">تاريخ ورود رد الإستيفاء</label>
-                                                <input type="text" name="completion_receive_date" id="receive_date" class="form-control date_autoclose" value="<?php
-                                                if ($possession_info['completion_receive_date']>1){
-                                                    echo date("j/n/Y", strtotime($possession_info['completion_receive_date']));
-                                                }
-                                                ?>">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-9">
-                                            <div class="form-group has-success">
-                                                <label class="control-label">قرار النيابة</label>
-                                                <textarea type="text" name="prosecution_decision" id="" class="form-control"><?php echo $possession_info['prosecution_decision']; ?></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!--/row-->
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <div class="form-group has-success">
-                                                <label class="control-label">تاريخ تصدير القضية</label>
-                                                <input type="text" name="case_send_date" id="receive_date" class="form-control date_autoclose" value="<?php
-                                                if ($possession_info['case_send_date']>1){
-                                                    echo date("j/n/Y", strtotime($possession_info['case_send_date']));
-                                                }
-                                                ?>">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="form-group has-success">
-                                                <label class="control-label">رقم الصادر</label>
-                                                <input type="text" name="case_send_number" id="number" class="form-control" value="<?php echo $possession_info['case_send_number']; ?>">
-                                            </div>
-                                        </div>
-                                    </div>
                                     <div class="form-actions">
                                         <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> Save</button>
                                         <button type="button" class="btn btn-inverse">Cancel</button>
@@ -381,6 +412,9 @@ LIMIT 100";?>
 <script src="js/buttons.html5.min.js"></script>
 <script src="js/buttons.print.min.js"></script>
 <script src="assets/plugins/toast-master/js/jquery.toast.js"></script>
+
+<!-- Bootstrap Duallistbox -->
+<script src="assets/plugins/bootstrap-duallistbox/bootstrap-duallistbox.js"></script>
 
 <!-- Date Picker Plugin JavaScript -->
 <script src="assets/plugins/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>

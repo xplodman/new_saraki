@@ -10,10 +10,10 @@
     <meta name="author" content="">
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="assets/images/logo-icon.png">
-    <title>Family | <?php echo $pageTitle;?></title>
+    <title><?php echo $pageTitle;?></title>
     <!-- Bootstrap Core CSS -->
-
     <link href="assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/plugins/bootstrap-duallistbox/bootstrap-duallistbox.css" rel="stylesheet">
     <!-- page css -->
     <link href="css/pages/login-register-lock.css" rel="stylesheet">
     <!-- select2 -->
@@ -43,6 +43,9 @@
     <link href="../assets/plugins/c3-master/c3.min.css" rel="stylesheet">
 <![endif]-->
     <style type="text/css">
+        input{
+            text-align:center;
+        }
         @font-face {
             font-family: "My Custom Font";
             src: url(assets/fonts/arabic.otf) format("truetype");

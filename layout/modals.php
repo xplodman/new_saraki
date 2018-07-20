@@ -1,4 +1,4 @@
-<div class="modal inmodal" id="add_possession_record" role="dialog" aria-hidden="true">
+<div class="modal inmodal" id="add_investigation_record" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content animated fadeIn">
             <div class="modal-header">
@@ -6,22 +6,18 @@
                 <h4 class="modal-title">إضافة قيد</h4>
             </div>
             <div class="modal-body">
-                <form method="post" action="php/add_possession_record.php">
-                    <div style="display: none;">
-                        <input type="checkbox" required id="national_id_check_1">
-                        <input type="checkbox" required id="national_id_check_2">
-                    </div>
+                <form method="post" action="php/add_investigation_record.php">
                     <div class="form-body">
                         <div class="form-group row">
-                            <label for="example-search-input" class="col-md-1 col-form-label">رقم الحيازة</label>
+                            <label for="example-search-input" class="col-md-1 col-form-label">رقم الحصر</label>
                             <div class="col-md-3">
                                 <div class="form-group has-danger">
-                                    <input required  type="number" name="possession_number" id="possession_number" class="form-control" placeholder="رقم">
+                                    <input required  type="number" name="investigation_number" id="investigation_number" class="form-control" placeholder="رقم">
                                 </div>
                             </div>
                             <div class="col-md-2">
                                 <div class="form-group has-danger">
-                                    <input required type="number" name="possession_year" id="possession_year" class="form-control" placeholder="سنة">
+                                    <input required type="number" name="investigation_year" id="investigation_year" class="form-control" placeholder="سنة">
                                 </div>
                             </div>
                         </div>
@@ -39,7 +35,7 @@
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group has-danger">
-                                    <select required name="main_ledger" class="select2 form-control custom-select"  style="width: 100%; height:100%;">
+                                    <select required name="case_main_ledger" class="select2 form-control custom-select"  style="width: 100%; height:100%;">
                                         <option value="" disabled selected>جدول</option>
                                         <?php
                                         $query = "SELECT * FROM main_ledger";
@@ -56,7 +52,7 @@
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group has-danger">
-                                    <select required name="depart" class="select2 form-control custom-select"  style="width: 100%; height:100%;">
+                                    <select required name="case_depart" class="select2 form-control custom-select"  style="width: 100%; height:100%;">
                                         <option value="" disabled selected>القسم</option>
                                         <?php
                                         $query = "SELECT * FROM depart";
@@ -77,31 +73,56 @@
                         </div>
                         <!--/row-->
                         <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-md-12">
                                 <div class="form-group has-danger">
-                                    <label class="control-label">تاريخ الورود</label>
-                                    <input required type="text" name="receive_date" id="receive_date" class="form-control date_autoclose" placeholder="تاريخ الورود">
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group has-danger">
-                                    <label class="control-label">موضوع التنازع</label>
-                                    <select required name="subject" class="select2 form-control custom-select"  style="width: 100%; height:100%;">
-                                        <option value="" disabled selected></option>
+                                    <label class="control-label">التهم</label>
+                                    <select multiple="multiple" class="form-control custom-select bootstrapDualListbox" name="charges[]">
                                         <?php
-                                        $query = "SELECT * FROM subject";
+                                        $query = "SELECT
+                                                      charges.name AS charges_name,
+                                                      charges.id_charges
+                                                    FROM
+                                                      charges";
                                         $results=mysqli_query($con, $query);
                                         //loop
-                                        foreach ($results as $subject){
+                                        foreach ($results as $charges){
                                             ?>
-                                            <option value="<?php echo $subject["id"];?>"><?php echo $subject["name"];?></option>
+                                            <option value="<?php echo $charges["id_charges"];?>"><?php echo $charges["charges_name"];?></option>
+                                            <?php
+                                        }
+                                        ?>
+                                    </select>
+
+                                </div>
+                            </div>
+                        </div>
+                        <!--/row-->
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group has-danger">
+                                    <label class="control-label">سبب البقاء</label>
+                                    <select multiple="multiple" class="form-control custom-select bootstrapDualListbox" name="reason_to_done[]">
+                                        <?php
+                                        $query = "SELECT
+                                                      reason_to_done.id_reason_to_done,
+                                                      reason_to_done.name AS reason_to_done_name
+                                                    FROM
+                                                      reason_to_done";
+                                        $results=mysqli_query($con, $query);
+                                        //loop
+                                        foreach ($results as $reason_to_done){
+                                            ?>
+                                            <option value="<?php echo $reason_to_done["id_reason_to_done"];?>"><?php echo $reason_to_done["reason_to_done_name"];?></option>
                                             <?php
                                         }
                                         ?>
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-5">
+                        </div>
+                        <!--/row-->
+                        <div class="row">
+                            <div class="col-md-8">
                                 <div class="form-group has-danger">
                                     <label class="control-label">أسم العضو المعروض عليه القضية</label>
                                     <select required name="prosecutor" class="select2 form-control custom-select"  style="width: 100%; height:100%;">
@@ -119,81 +140,30 @@
                                     </select>
                                 </div>
                             </div>
-                        </div>
-                        <!--/row-->
-                        <div class="row">
-                            <div class="col-md-8">
-                                <div class="form-group has-danger">
-                                    <label class="control-label">أسم الشاكي</label>
-                                    <input required type="text" name="plaintiff" id="" class="form-control" placeholder="أسم الطرف">
-                                </div>
-                            </div>
                             <div class="col-md-4">
                                 <div class="form-group has-danger">
-                                    <label class="control-label">الرقم القومي</label>
-                                    <input required oninvalid="this.setCustomValidity('برجاء إدخال رقم قومي صحيح')" oninput="setCustomValidity('')" type="text" name="plaintiff_id" id="national_id" class="form-control" placeholder="الرقم القومي" onchange="check_national_id_1(this)" onkeypress="return isNumberKey(event)" minlength="14" maxlength="14">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-8">
-                                <div class="form-group has-danger">
-                                    <label class="control-label">أسم المشكو في حقه</label>
-                                    <input required type="text" name="defendant" id="" class="form-control" placeholder="أسم الطرف">
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group has-danger">
-                                    <label class="control-label">الرقم القومي</label>
-                                    <input required oninvalid="this.setCustomValidity('برجاء إدخال رقم قومي صحيح')" oninput="setCustomValidity('')"type="text" name="defendant_id" id="national_id_2" class="form-control" placeholder="الرقم القومي" onchange="check_national_id_2(this)"  onkeypress="return isNumberKey(event)" minlength="14" maxlength="14">
-                                </div>
-                            </div>
-                        </div>
-                        <!--/row-->
-                        <div class="row">
-                            <div class="col-md-3">
-                                <div class="form-group has-success">
-                                    <label class="control-label">تاريخ قرار الإستيفاء</label>
-                                    <input type="text" name="completion_send_date" id="receive_date" class="form-control date_autoclose" placeholder="تاريخ قرار الإستيفاء">
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group has-success">
-                                    <label class="control-label">أسم المندوب</label>
-                                    <input type="text" name="completion_delegate" id="" class="form-control" placeholder="أسم المندوب">
+                                    <label class="control-label">حالة القضية</label>
+                                    <select required name="case_status" class="select2 form-control custom-select"  style="width: 100%; height:100%;">
+                                        <option value="" disabled selected></option>
+                                        <?php
+                                        $query = "SELECT
+                                                      case_status.idcase_status,
+                                                      case_status.name AS case_status_name
+                                                    FROM
+                                                      case_status";
+                                        $results=mysqli_query($con, $query);
+                                        //loop
+                                        foreach ($results as $case_status){
+                                            ?>
+                                            <option value="<?php echo $case_status["idcase_status"];?>"><?php echo $case_status["case_status_name"];?></option>
+                                            <?php
+                                        }
+                                        ?>
+                                    </select>
                                 </div>
                             </div>
                         </div>
                         <!--/row-->
-                        <div class="row">
-                            <div class="col-md-3">
-                                <div class="form-group has-success">
-                                    <label class="control-label">تاريخ ورود رد الإستيفاء</label>
-                                    <input type="text" name="completion_receive_date" id="receive_date" class="form-control date_autoclose">
-                                </div>
-                            </div>
-                            <div class="col-md-9">
-                                <div class="form-group has-success">
-                                    <label class="control-label">قرار النيابة</label>
-                                    <textarea type="text" name="prosecution_decision" id="" class="form-control"></textarea>
-                                </div>
-                            </div>
-                        </div>
-                        <!--/row-->
-                        <div class="row">
-                            <div class="col-md-3">
-                                <div class="form-group has-success">
-                                    <label class="control-label">تاريخ تصدير القضية</label>
-                                    <input type="text" name="case_send_date" id="receive_date" class="form-control date_autoclose">
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <div class="form-group has-success">
-                                    <label class="control-label">رقم الصادر</label>
-                                    <input type="text" name="case_send_number" id="number" class="form-control">
-                                </div>
-                            </div>
-                        </div>
                         <div class="form-actions">
                             <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> تسجيل</button>
                             <button class="btn btn-inverse" type="button" data-dismiss="modal">إلغاء</button>

@@ -6,7 +6,7 @@
         $backresult = $_GET['backresult'];
         ?>
         $.toast({
-            position: 'top-right',
+            position: 'bottom-right',
             <?php
             switch ($backresult) {
                 case "0":
@@ -23,7 +23,7 @@
                     break;
                 case "2":
                     echo "
-                            heading: 'رقم الحيازة مكرر, برجاء التأكد من الرقم...',
+                            heading: 'رقم الحصر مكرر, برجاء التأكد من الرقم...',
                             loaderBg:'#ff6849',
                             icon: 'info',";
                     break;
@@ -227,6 +227,10 @@
             });
         }
     }
+</script>
+<script>
+    $(".select2").select2();
+    $(".bootstrapDualListbox").bootstrapDualListbox();
 </script>
 <?php
 mysqli_close($con);
