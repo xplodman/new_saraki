@@ -15,59 +15,18 @@ include_once "layout/header.php";
         </div>
     </div>
     <!-- ============================================================== -->
-    <!-- php login script -->
-    <!-- ============================================================== -->
-    <?php
-    if(isset($_POST['submit'])) {
-        $username = $_POST['username'];
-        $username = mysqli_real_escape_string($con, $username);
-
-        $password = $_POST['password'];
-        $password = mysqli_real_escape_string($con, $password);
-
-        $result = mysqli_query($con, "SELECT
-  users.id,
-  users.nickname,
-  role.name AS role_name
-FROM
-  users
-  INNER JOIN role ON users.role_id = role.id
-Where users.username = '$username' And users.password = '$password'")or die(mysqli_error($con));
-        if (mysqli_num_rows($result) != 0) {
-
-            $row = mysqli_fetch_assoc($result);
-
-
-            $_SESSION['cj_family']['timestamp'] = time();
-            $_SESSION['cj_family']['authenticate'] = "true";
-            $_SESSION['cj_family']['id'] = $row['id'];
-            $_SESSION['cj_family']['job'] = $row['role_name'];
-            $_SESSION['cj_family']['nickname'] = $row['nickname'];
-            header('Location: index.php');
-            exit;
-        } else {
-            header('Location: login.php?backresult=0');
-            $_SESSION['cj_family']['username'] = $username;
-            exit;
-        }
-    }
-    ?>
-    <!-- ============================================================== -->
-    <!-- end php login script -->
-    <!-- ============================================================== -->
-    <!-- ============================================================== -->
     <!-- Main wrapper - style you can find in pages.scss -->
     <!-- ============================================================== -->
     <section id="wrapper">
         <div class="login-register" style="background-image:url(assets/images/background/login-register.jpg);">
             <div class="login-box">
                 <div class="card-body card">
-                    <form  class="form-horizontal form-material" id="loginform" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+                    <form  class="form-horizontal form-material" id="loginform" method="post" action="php/check_login.php">
                         <h3 class="box-title m-b-20">تسجيل الدخول</h3>
                         <div class="form-group ">
                             <div class="col-xs-12">
                                 <input class="form-control" type="text" required="" placeholder="Username" name="username" value="<?php
-                                if (isset($_SESSION['cj_family']['username'])){echo $_SESSION['cj_family']['username'];}?>" oninvalid="this.setCustomValidity('هذا الحقل إجباري')" oninput="setCustomValidity('')"> </div>
+                                if (isset($_SESSION['saraki']['username'])){echo $_SESSION['saraki']['username'];}?>" oninvalid="this.setCustomValidity('هذا الحقل إجباري')" oninput="setCustomValidity('')"> </div>
                         </div>
                         <div class="form-group">
                             <div class="col-xs-12">
@@ -112,23 +71,6 @@ Where users.username = '$username' And users.password = '$password'")or die(mysq
     });
 
     </script>
-    <?php
-    if (isset($_GET['backresult'])){
-        $backresult=$_GET['backresult'];
-        if ($backresult ==  "0") {
-            ?>
-            <script>
-                $.toast({
-                    heading: 'أسم المستخدم أو كلمة المرور خطأ',
-                    position: 'top-right',
-                    loaderBg:'#ff6849',
-                    icon: 'error',
-                    hideAfter: 3500
-                })
-            </script>
-            <?php
-        }
-    }
-    ?>
+<?php include_once 'layout/backresult.php'?>
 </body>
 </html>

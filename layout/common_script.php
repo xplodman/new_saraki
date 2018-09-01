@@ -1,49 +1,4 @@
 <script>
-    $(document).ready(function() {
-        <?php
-        if (isset($_GET['backresult']))
-        {
-        $backresult = $_GET['backresult'];
-        ?>
-        $.toast({
-            position: 'bottom-right',
-            <?php
-            switch ($backresult) {
-                case "0":
-                    echo "
-                            heading: 'لم تتم العملية بنجاح',
-                            loaderBg:'#ff6849',
-                            icon: 'error',";
-                    break;
-                case "1":
-                    echo "
-                            heading: 'تمت العملية بنجاح',
-                            loaderBg:'#ff6849',
-                            icon: 'success',";
-                    break;
-                case "2":
-                    echo "
-                            heading: 'رقم الحصر مكرر, برجاء التأكد من الرقم...',
-                            loaderBg:'#ff6849',
-                            icon: 'info',";
-                    break;
-                case "3":
-                    echo "
-                            heading: 'رقم القضية مكرر, برجاء التأكد من الرقم...',
-                            loaderBg:'#ff6849',
-                            icon: 'info',";
-                    break;
-            }
-            ?>
-
-            hideAfter: 6000
-        });
-        <?php
-        }
-        ?>
-    });
-</script>
-<script>
     $('document').ready(function(){
         var username_state = false;
         $('#national_id_2').on('blur', function(){
@@ -232,6 +187,39 @@
     $(".select2").select2();
     $(".bootstrapDualListbox").bootstrapDualListbox();
 </script>
+<script>
+    $(document).ready(function() {
+        // Setup - add a text input to each footer cell
+        $('#datatable tfoot th').not('.unsearchable').each( function () {
+            var title = $(this).text();
+            $(this).html( '<input class="col-lg-12" type="text" placeholder="'+title+'" />' );
+        } );
+
+        // DataTable
+        var table = $('#datatable').DataTable();
+
+        // Apply the search
+        table.columns().every( function () {
+            var that = this;
+
+            $( 'input', this.footer() ).on( 'keyup change', function () {
+                if ( that.search() !== this.value ) {
+                    that
+                        .search( this.value )
+                        .draw();
+                }
+            } );
+        } );
+    } );
+</script>
+<script>
+    // Date Picker
+    jQuery('.date_autoclose').datepicker({
+        autoclose: true,
+        todayHighlight: true,
+        dateFormat: 'd-m-yy'
+    });
+</script>
 <?php
-mysqli_close($con);
+mysqli_close($sqlcon);
 ?>

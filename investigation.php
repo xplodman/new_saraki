@@ -77,14 +77,11 @@ FROM
   INNER JOIN users ON case_has_investigation.users_id = users.id
   INNER JOIN prosecutor ON case_has_investigation.prosecutor_id = prosecutor.id
   INNER JOIN case_status ON case_has_investigation.case_status_idcase_status = case_status.idcase_status
-  INNER JOIN case_has_investigation_has_charges ON case_has_investigation.id_case_has_investigation =
+  left JOIN case_has_investigation_has_charges ON case_has_investigation.id_case_has_investigation =
     case_has_investigation_has_charges.case_has_investigation_id_case_has_investigation
-  INNER JOIN case_has_investigation_has_reason_to_done ON
+  left JOIN case_has_investigation_has_reason_to_done ON
     case_has_investigation_has_reason_to_done.case_has_investigation_id_case_has_investigation =
     case_has_investigation.id_case_has_investigation
-  INNER JOIN reason_to_done ON case_has_investigation_has_reason_to_done.reason_to_done_id_reason_to_done =
-    reason_to_done.id_reason_to_done
-  INNER JOIN charges ON case_has_investigation_has_charges.charges_id_charges = charges.id_charges
 WHERE
   case_has_investigation.status = 1 AND
   case_has_investigation.deleted = 0";
@@ -98,7 +95,7 @@ WHERE
                             }
                             if (!empty($_POST['case_number'])) {
                                 $case_number=$_POST['case_number'];
-                                if(trim($case_number) != ''){$investigation_query .= " AND  `case`.case_number=9786 ";}
+                                if(trim($case_number) != ''){$investigation_query .= " AND  `case`.case_number='$case_number' ";}
                             }
                             if (!empty($_POST['case_year'])) {
                                 $case_year=$_POST['case_year'];
@@ -118,13 +115,16 @@ WHERE
                             }
                             if (!empty($_POST['charges'])) {
                                 $charges=$_POST['charges'];
-                                if(trim($charges) != ''){$investigation_query .= " AND charges.id_charges ='$charges'";}
+                                if(trim($charges) != ''){$investigation_query .= " AND case_has_investigation_has_charges.charges_id_charges ='$charges'";}
                             }
                             if (!empty($_POST['reason_to_done'])) {
                                 $reason_to_done=$_POST['reason_to_done'];
-                                if(trim($reason_to_done) != ''){$investigation_query .= " AND reason_to_done.id_reason_to_done = '$reason_to_done'";}
+                                if(trim($reason_to_done) != ''){$investigation_query .= " AND case_has_investigation_has_reason_to_done.reason_to_done_id_reason_to_done = '$reason_to_done'";}
                             }
-
+                            if (!empty($_POST['case_status'])) {
+                                $case_status=$_POST['case_status'];
+                                if(trim($case_status) != ''){$investigation_query .= " AND case_status.idcase_status = '$case_status'";}
+                            }
                             $investigation_query .= " GROUP BY case_has_investigation.id_case_has_investigation";
                         }else{
                             $investigation_query="SELECT
@@ -152,6 +152,7 @@ WHERE
   case_has_investigation.status = 1 AND
   case_has_investigation.deleted = 0";
                         }
+//                        echo $investigation_query;
                         ?>
                         <div class="collapse card-body" id="search">
                             <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">

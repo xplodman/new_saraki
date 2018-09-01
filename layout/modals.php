@@ -55,7 +55,12 @@
                                     <select required name="case_depart" class="select2 form-control custom-select"  style="width: 100%; height:100%;">
                                         <option value="" disabled selected>القسم</option>
                                         <?php
-                                        $query = "SELECT * FROM depart";
+                                        $query = "SELECT
+  depart.id,
+  depart.name
+FROM
+  depart
+  ";
                                         $results=mysqli_query($con, $query);
                                         //loop
                                         foreach ($results as $depart){
@@ -174,6 +179,7 @@
         </div>
     </div>
 </div>
+
 <script>
     function isNumberKey(evt){
         var charCode = (evt.which) ? evt.which : event.keyCode

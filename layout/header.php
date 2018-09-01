@@ -40,7 +40,6 @@
     <script src="assets/js/html5shiv.js"></script>
     <script src="assets/js/respond.min.js"></script>
     <!--c3 CSS -->
-    <link href="../assets/plugins/c3-master/c3.min.css" rel="stylesheet">
 <![endif]-->
     <style type="text/css">
         input{
@@ -50,7 +49,7 @@
             font-family: "My Custom Font";
             src: url(assets/fonts/arabic.otf) format("truetype");
         }
-        div , i , h1 , h2 , h3 , h4 , h5 {
+        div , i , h1 , h2 , h3 , h4 , h5 , h6 {
             font-family: "My Custom Font";
         }
     </style>
